@@ -7,7 +7,11 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+
+
+
 const AddProduct = () => {
+  const BaseUrl =import.meta.env.VITE_BACKEND_URL;
   const [open, setOpen] = useState(false);
  const navigate = useNavigate();
   // Open and close modal
@@ -49,7 +53,7 @@ const AddProduct = () => {
     onSubmit: async (values, { resetForm }) => {
       console.log(values);
       try {
-        const response = await axios.post('http://localhost:3000/product/add', values, {
+        const response = await axios.post(`${BaseUrl}/product/add`, values, {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         });
@@ -95,7 +99,7 @@ const AddProduct = () => {
         >
           <div className="relative">
             <Typography variant="h5" textAlign="center" mb={2}>
-              Add New Product
+              Add New Product 
             </Typography>
             <button onClick={handleClose} className="absolute top-1 right-0">
               <FaTimes size={30} />

@@ -16,13 +16,18 @@ import {
 } from "@mui/material";
 
 const ShowOrders = () => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const [selectedOrder, setSelectedOrder] = useState(null); // Track selected order for modal
   const {orders,setOrders} = useCart(); // Store orders
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/order");
+        const response = await axios.get(`${Base_URL}/order`, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        });
+        
         setOrders(response.data);
       } catch (error) {
         console.error("Fetch orders failed:", error);

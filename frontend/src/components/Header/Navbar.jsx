@@ -21,6 +21,7 @@ const pages = ['Products', 'Orders', 'Cart'];
 const settings = ['Profile', 'sales', 'Logout'];
 
 function Navbar() {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const{user}=useContext(UserContext);
@@ -46,7 +47,7 @@ function Navbar() {
   const handlesetting = async() => {
     if(settings[2]==='Logout'){
       try{
-        const response = await axios.get('http://localhost:3000/user/logout', {
+        const response = await axios.get(`${Base_URL}/user/logout`, {
           withCredentials: true,
         });
         console.log('User logged out:', response.data);

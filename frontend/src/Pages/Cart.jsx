@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 
 const Cart = () => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const { user } = useContext(UserContext);
   const { cartItems ,setCartItems} = useCart();
  const navigate=useNavigate();
@@ -101,7 +102,7 @@ const Cart = () => {
       paidAt: new Date(),
       method: paymentMethod,
     };
-    const response=axios.post("http://localhost:3000/order/add",orderData,
+    const response=axios.post(`${Base_URL}/order/add`,orderData,
     {
       withCredentials: true,
     } 

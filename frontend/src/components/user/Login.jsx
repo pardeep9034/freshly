@@ -24,7 +24,7 @@ const LoginPage = () => {
  
   const navigate = useNavigate();
 
-  const API_BASE_URL = "http://localhost:3000"; // Centralized API URL
+  const API_BASE_URL = "https://freshly-backend-wis8.onrender.com"; // Centralized API URL
 
   const handleLogin = async (e) => {
     e.preventDefault();

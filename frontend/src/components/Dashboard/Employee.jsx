@@ -11,12 +11,19 @@ import {
 
 
 const Employee = () => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const [employees, setEmployees] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/user');
+        const response = await axios.get(`${Base_URL}/user`,
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          });
+        
+
         console.log(response.data);
         setEmployees(response.data);
       } catch (error) {
@@ -36,7 +43,7 @@ const Employee = () => {
               <TableCell>Phone Number</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Active</TableCell>
-              <TableCell>Added By</TableCell>
+             
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -47,7 +54,7 @@ const Employee = () => {
                 <TableCell>{employee.phoneno}</TableCell>
                 <TableCell>{employee.role}</TableCell>
                 <TableCell>{employee.isActive ? "Yes" : "No"}</TableCell>
-                <TableCell>{employee.addedBy}</TableCell>
+               
                 <TableCell>
                   <div>
                     <button className="bg-green-500 text-white px-4 py-1 rounded-md mr-2" onClick={()=>{setIsOpen(true)}}>Edit</button>

@@ -9,6 +9,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import axios from "axios";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const links = [
     { path: "main", label: "Dashboard", icon: <DashboardIcon />, isAvailable: true },
     { path: "orders", label: "Orders", icon: <ShoppingCartIcon />, isAvailable: true },
@@ -59,7 +60,8 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700"
               onClick={async () => {
                 try {
-                  await axios.get("http://localhost:3000/user/logout", {
+                  await axios.get(`${Base_URL}/use/logout`, {
+                    headers: { "Content-Type": "application/json" },
                     withCredentials: true,
                   });
                   window.location.href = "/login";

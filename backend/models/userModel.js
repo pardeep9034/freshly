@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true }, // To enable/disable employee access
 });
 const managerSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+    phoneno:{ type:String,required:true },
     password: { type: String, required: true }, // Store hashed passwords
     role: { type: String, default: "manager" },
 });
@@ -22,8 +22,9 @@ const managerModel = mongoose.model('Manager', managerSchema);
 
 
 // const manager = new managerModel({
-//     username: "manager",
+//     phoneno:"1234567890",
 //     password: "manager",
+    
 // });
 // const user = new userModel({
 //     phoneno: 1234567890,

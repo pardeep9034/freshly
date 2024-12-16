@@ -103,6 +103,7 @@ import{ Skeleton} from "@mui/material";
   
 
 const Products = () => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
  const[products,setProducts]=useState([]);
@@ -111,7 +112,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/product"
+        const response = await axios.get(`${Base_URL}/product`
 
           , { 
             headers: { "Content-Type": "application/json" },

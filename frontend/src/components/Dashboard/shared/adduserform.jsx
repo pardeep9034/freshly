@@ -30,14 +30,15 @@ const AddUserSchema = Yup.object().shape({
 });
 
 const AddUserModal = ({ Opens, handleClose, managerId }) => {
+  const BaseUrl =import.meta.env.VITE_BACKEND_URL;
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
 
   const handleSubmit = async (values, { resetForm }) => {
-    console.log(values, managerId._id);
+    console.log(values, managerId);
     try {
-      const response = await axios.post("http://localhost:3000/user/add", {
+      const response = await axios.post(`${BaseUrl}/user/add`, {
         ...values,
         addedBy: managerId,
       });

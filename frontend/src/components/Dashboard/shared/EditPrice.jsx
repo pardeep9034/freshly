@@ -10,12 +10,13 @@ const EditPrice = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [newPrice, setNewPrice] = useState("");
   const [error, setError] = useState("");
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
 
   // Fetch products from the server
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/product", {
+        const response = await axios.get(`${Base_URL}/product`, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
@@ -56,7 +57,7 @@ const EditPrice = () => {
     if (selectedProduct && newPrice) {
       try {
         const response = await axios.put(
-          `http://localhost:3000/product/${selectedProduct._id}`,
+          `${Base_URL}/product/${selectedProduct._id}`,
           {
             [selectedProduct.isPacket ? "packetPrice" : "pricePerKg"]: newPrice,
           },

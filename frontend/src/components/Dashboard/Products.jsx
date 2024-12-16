@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 
 const Products = () => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
@@ -30,7 +31,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/product", {
+        const response = await axios.get(`${Base_URL}/product`, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
@@ -46,7 +47,7 @@ const Products = () => {
   // Delete a product
   const deleteProduct = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/product/${id}`, {
+      const response = await axios.delete(`${Base_URL}/product/${id}`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -84,7 +85,7 @@ const Products = () => {
     console.log("Saving product:", currentProduct);
     try {
       const response = await axios.put(
-        `http://localhost:3000/product/${currentProduct._id}`,
+        `${Base_URL}/product/${currentProduct._id}`,
         currentProduct,
         {
           headers: { "Content-Type": "application/json" },

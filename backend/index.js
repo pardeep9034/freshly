@@ -14,7 +14,7 @@ const orderRoutes = require('./routes/orderRoutes');
 // Middleware
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['https://freshly-eight.vercel.app/','http://localhost:5173'],
     credentials: true, // Allow cookies
   })
 );
@@ -32,10 +32,7 @@ app.use('/order', orderRoutes);
 
 // Database Connection
 mongoose
-  .connect(process.env.DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.DB_URL)
   .then(() => console.log('Connected to MongoDB successfully!'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 

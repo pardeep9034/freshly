@@ -11,6 +11,7 @@ export const CartContext = createContext();
 
 // Create a provider component
 export const UserProvider = ({ children }) => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const [user, setUser] = useState(null); // Store user data
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track login state
   // const [products, setProducts] = useState([]); // Store products data
@@ -57,6 +58,7 @@ export const CartProvider = ({ children }) => {
     setCartItems((prevItems) => [...prevItems, product]);
   };
   useEffect(() => {
+    const Base_URL = import.meta.env.VITE_BACKEND_URL;
     const fetchOrders = async () => {
       try {
         const response = await axios.get(`${Base_URL}/order`, {

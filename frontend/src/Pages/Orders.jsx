@@ -16,8 +16,10 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { useContext } from "react";
 import { UserContext } from "../utils/GeneralContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Orders = () => {
+  const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const {user}=useContext(UserContext);
   const navigate=useNavigate();
   const [orders, setOrders] = useState([]);
@@ -43,7 +45,11 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:3000/order");
+        const response = await axios.get(`${Base_URL}/order`, {
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+        
         const data = await response.json();
         setOrders(data);
       } catch (error) {

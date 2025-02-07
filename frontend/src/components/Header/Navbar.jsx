@@ -16,7 +16,7 @@ import { useContext } from 'react';
 import { UserContext } from '../../utils/GeneralContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Skeleton } from '@mui/material';
+
 const pages = ['Products', 'Orders', 'Cart'];
 const settings = ['Profile', 'sales', 'Logout'];
 
@@ -50,11 +50,11 @@ function Navbar() {
         const response = await axios.get(`${Base_URL}/user/logout`, {
           withCredentials: true,
         });
-        console.log('User logged out:', response.data);
+        // console.log('User logged out:', response.data);
         navigate('/login');
       }
       catch(error){
-        console.error('Logout failed:', error);
+        // console.error('Logout failed:', error);
       }
       
       
@@ -67,7 +67,7 @@ function Navbar() {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: 'rgb(210, 210, 220,.7)', // Light translucent white
+        backgroundColor: '#cdeda3', // Light translucent white
         color: '#2F4F2F', // Deep forest green for text
         // boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Subtle shadow
         backdropFilter: 'blur(10px)', // Background blur
@@ -89,7 +89,7 @@ function Navbar() {
               fontWeight: 800,
               fontSize: '2rem',
               letterSpacing: '.1rem',
-              color: '#2F4F2F',
+              color: '#102000',
               textDecoration: 'none',
             }}
           >
@@ -104,13 +104,14 @@ function Navbar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              sx={{ color: '#2F4F2F' }}
+              sx={{ color: '#102000' }}
             >
               <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
+             
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -122,7 +123,12 @@ function Navbar() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{ display: { xs: 'block', md: 'none' } ,"& .MuiMenu-paper": {
+                bgcolor: '#f9faef',
+                color: '#102000',
+                border: '1px solid #102000',
+                borderRadius: '8px',
+              }}}
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
@@ -132,7 +138,9 @@ function Navbar() {
                     sx={{
                       textAlign: 'center',
                       textDecoration: 'none',
-                      color: '#2F4F2F',
+                      color: '#102000',
+                      
+                      
                     }}
                   >
                     {page}
@@ -154,7 +162,7 @@ function Navbar() {
               flexGrow: 1,
               fontWeight: 700,
               letterSpacing: '.2rem',
-              color: '#2F4F2F',
+              color: '#102000',
               textDecoration: 'none',
             }}
           >
@@ -173,10 +181,11 @@ function Navbar() {
                   sx={{
                     m: 2,
                     
-                    color: '#2F4F2F',
+                    color: '#102000',
                     display: 'block',
                     fontSize: '1rem',
-                    textTransform: 'capitalize',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
                   }}
                 >
                   {page}
@@ -196,7 +205,13 @@ function Navbar() {
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{ mt: '45px' ,mr:"40px" ,
+                  "& .MuiMenu-paper": {
+                    bgcolor: '#f9faef',
+                    color: '#102000',
+                    border: '1px solid #102000',
+                    borderRadius: '8px',
+                }}}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -212,7 +227,9 @@ function Navbar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}
+                  // sx={{display:"flex",justifyContent:"center" ,bgcolor:"#f9faef",color:"#102000"}}
+                  >
                     <Typography textAlign="center"onClick={handlesetting}>{setting}</Typography>
                   </MenuItem>
                 ))}

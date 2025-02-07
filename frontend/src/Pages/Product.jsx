@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import{ Skeleton} from "@mui/material";
+import CartButton from "../components/Shared/cartBtn";
 // import { use } from "../../../backend/routes/userRoutes";
 
 // const products = [
@@ -122,7 +123,7 @@ const Products = () => {
         const data = response.data;
         setProducts(data);
       } catch (error) {
-        console.error("Fetch products failed:", error);
+        // console.error("Fetch products failed:", error);
       }
     };
     fetchProducts();
@@ -159,16 +160,18 @@ const Products = () => {
       )}
 
         
-    <div className="products-container mt-28 ">
+    <div className="products-container mt-20 bg-surface">
     
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols- lg:grid-cols-6 px-5 py-3 ">
+      <div className="grid gap-4 grid-cols-2 sm:grid-cols- lg:grid-cols-6 px-5 py-7 ">
         {filteredProducts.length >0?filteredProducts.map((product) => (
           // console.log(product),
             <ProductCard key={product._id} {...product} />
           
         )):<Typography variant="h6" sx={{  mt: 5 ,ml:65 }}>No products found...</Typography>}
       </div>
+      <CartButton/>
     </div>
+
     </>
   );
 };

@@ -15,9 +15,9 @@ const categories = [
 
 const CategoryFilterBar = ({ onFilter, activeCategory }) => {
   const{selectedcategory, setSelectedCategory} = useContext(UserContext);
- if(selectedcategory){
-  console.log(selectedcategory);
- }
+//  if(selectedcategory){
+//   // console.log(selectedcategory);
+//  }
   return (
     
     <Box
@@ -30,7 +30,7 @@ const CategoryFilterBar = ({ onFilter, activeCategory }) => {
     //     borderBottom: "1px solid #ddd",
     //     overflowX: "auto", // Enables horizontal scroll for small screens
     //   }}
-      className=" justify-center sm: flex gap-2   pl-14 pr-2 bg-gray-100 border-b border-gray-300 overflow-x-auto fixed w-full z-10 py-3"
+      className=" justify-center sm: flex gap-2   pl-14 pr-2 bg-secondary_container border-b border-gray-300 overflow-x-auto fixed w-full z-10 py-3"
     >
       {categories.map((category) => (
         <Button
@@ -42,10 +42,12 @@ const CategoryFilterBar = ({ onFilter, activeCategory }) => {
             alignItems: "center",
             padding: "10px",
             borderRadius: "12px",
-            backgroundColor: activeCategory === category.label ? "#dcedc8" : "#ffffff",
+            color: activeCategory === category.label ? "#102000" : "#102000",
+            backgroundColor: activeCategory === category.label ? "#dcedc8" : "#f3f4e9",
             boxShadow: activeCategory === category.label ? "0 4px 6px rgba(0,0,0,0.2)" : "0 2px 4px rgba(0,0,0,0.1)",
             "&:hover": {
-              backgroundColor: "#f1f8e9",
+              backgroundColor: "#586249",
+              color: "#fff",
             },
           }}
         >
@@ -53,8 +55,10 @@ const CategoryFilterBar = ({ onFilter, activeCategory }) => {
           <Typography
             fontSize="10px"
             fontWeight="600"
-            color={activeCategory === category.label ? "primary.main" : "text.secondary"}
-            sx={{ marginTop: "4px" }}
+            
+            sx={{ marginTop: "4px"}} 
+            
+          
           >
             {category.label}
           </Typography>

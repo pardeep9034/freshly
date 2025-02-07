@@ -52,7 +52,7 @@ const Orders = () => {
         
         setOrders(response.data);
       } catch (error) {
-        console.error("Fetch orders failed:", error);
+        // console.error("Fetch orders failed:", error);
         setError(error);
       }
     };
@@ -66,32 +66,28 @@ const Orders = () => {
 
   return (
     
-    <div className="p-4 bg-gray-50 min-h-screen">
+    <div className="p-4 bg-surface min-h-screen">
       {/* Page Header */}
-      <Typography
-        variant="h4"
-        className="text-center text-blue-600 font-semibold mb-4"
-      >
-        Orders
-      </Typography>
+      
 
       {/* Orders Table */}
-      <TableContainer component={Paper} className="shadow-md">
+      <TableContainer component={Paper} className="shadow-md " >
         <Table>
           <TableHead>
-            <TableRow className="bg-blue-500">
-              <TableCell className="text-white font-bold">Order ID</TableCell>
-              <TableCell className="text-white font-bold">Seller</TableCell>
-              <TableCell className="text-white font-bold">Total Price</TableCell>
-              <TableCell className="text-white font-bold">Order Date</TableCell>
+            <TableRow className="bg-primary" alienItems="center">
+              <TableCell  sx={{color:"white",fontSize:"1rem",fontWeight:"600"}}>Order ID</TableCell>
+              <TableCell  sx={{color:"white",fontSize:"1rem",fontWeight:"600"}}>Seller</TableCell>
+              <TableCell  sx={{color:"white",fontSize:"1rem",fontWeight:"600"}}>Total Price</TableCell>
+              <TableCell  sx={{color:"white",fontSize:"1rem",fontWeight:"600"}}>Order Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {orders.slice().reverse().map((order, index) => (
               <TableRow
                 key={order._id}
-                className="hover:bg-gray-100 transition duration-300 cursor-pointer"
+                className="hover:bg-secondary_container transition duration-300 cursor-pointer bg-surface"
                 onClick={() => handleOpen(order, index)}
+                alienItems="center"
               >
                 <TableCell>ORD00{orders.length-index}</TableCell>
                 <TableCell>{order.sellername || "N/A"}</TableCell>
@@ -155,7 +151,7 @@ const Orders = () => {
 
                 <Box className="grid grid-cols-2 gap-4 bg-gray-100 p-4 rounded-lg shadow-md">
                   <Typography className="text-gray-700 font-medium">
-                    <strong>Order ID:</strong> ORD00{selectedOrderIndex + 1}
+                    <strong>Order ID:</strong> ORD00{orders.length-selectedOrderIndex}
                   </Typography>
                   <Typography className="text-gray-700 font-medium">
                     <strong>Seller:</strong> {selectedOrder.sellername || "N/A"}

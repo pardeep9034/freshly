@@ -36,7 +36,7 @@ const AddUserModal = ({ Opens, handleClose, managerId }) => {
 
 
   const handleSubmit = async (values, { resetForm }) => {
-    console.log(values, managerId);
+    // console.log(values, managerId);
     try {
       const response = await axios.post(`${BaseUrl}/user/add`, {
         ...values,

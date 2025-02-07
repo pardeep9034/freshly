@@ -60,13 +60,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
               className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700"
               onClick={async () => {
                 try {
-                  await axios.get(`${Base_URL}/use/logout`, {
+                  await axios.get(`${Base_URL}/user/logout`, {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
                   });
                   window.location.href = "/login";
                 } catch (error) {
-                  console.error("Logout failed:", error);
+                  // console.error("Logout failed:", error);
                 }
               }}
             >

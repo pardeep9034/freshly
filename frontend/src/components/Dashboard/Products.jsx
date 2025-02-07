@@ -37,7 +37,7 @@ const Products = () => {
         });
         setProducts(response.data);
       } catch (err) {
-        console.error("Fetch products failed:", err);
+        // console.error("Fetch products failed:", err);
         setError("Failed to load products. Please try again.");
       }
     };
@@ -52,18 +52,18 @@ const Products = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        console.log("Product deleted successfully.");
+        // console.log("Product deleted successfully.");
         setProducts(products.filter((product) => product._id !== id));
       }
     } catch (error) {
-      console.error("Delete product failed:", error);
+      // console.error("Delete product failed:", error);
       setError("Failed to delete product. Please try again.");
     }
   };
 
   // Open the modal for editing
   const handleOpen = (product) => {
-    console.log("Editing product:", product);
+    // console.log("Editing product:", product);
     setCurrentProduct(product);
     setOpen(true);
   };
@@ -82,7 +82,7 @@ const Products = () => {
 
   // Save the edited product
   const saveProduct = async () => {
-    console.log("Saving product:", currentProduct);
+    // console.log("Saving product:", currentProduct);
     try {
       const response = await axios.put(
         `${Base_URL}/product/${currentProduct._id}`,
@@ -101,7 +101,7 @@ const Products = () => {
         handleClose();
       }
     } catch (error) {
-      console.error("Update product failed:", error);
+      // console.error("Update product failed:", error);
       setError("Failed to update product. Please try again.");
     }
   };

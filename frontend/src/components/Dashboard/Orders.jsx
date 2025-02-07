@@ -30,7 +30,7 @@ const ShowOrders = () => {
         
         setOrders(response.data);
       } catch (error) {
-        console.error("Fetch orders failed:", error);
+        // console.error("Fetch orders failed:", error);
       }
     };
     fetchOrders();

@@ -51,12 +51,24 @@ export const UserProvider = ({ children }) => {
 };
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    // Retrieve initial value from localStorage
+    const storedCart = localStorage.getItem("cartItems");
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+  useEffect(() => {
+    // Sync cartItems to localStorage whenever it changes
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const [orders, setOrders] = useState([]);
 
   const addToCart = (product) => {
+   
     setCartItems((prevItems) => [...prevItems, product]);
+   
   };
+
   useEffect(() => {
     const Base_URL = import.meta.env.VITE_BACKEND_URL;
     const fetchOrders = async () => {

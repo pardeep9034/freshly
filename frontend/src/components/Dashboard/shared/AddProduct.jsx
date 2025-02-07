@@ -13,11 +13,12 @@ import axios from 'axios';
 const AddProduct = () => {
   const BaseUrl =import.meta.env.VITE_BACKEND_URL;
   const [open, setOpen] = useState(false);
+  const [selectedImage,setSelectedImage] = useState(null);
  const navigate = useNavigate();
   // Open and close modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  
   // Formik setup
   const formik = useFormik({
     initialValues: {
@@ -51,20 +52,32 @@ const AddProduct = () => {
       secondaryCategory: Yup.string().required('Secondary category is required'),
     }),
     onSubmit: async (values, { resetForm }) => {
-      console.log(values);
+      // console.log(values);
+      // console.log(selectedImage);
       try {
-        const response = await axios.post(`${BaseUrl}/product/add`, values, {
-          headers: { 'Content-Type': 'application/json' },
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('pricePerKg', values.pricePerKg);
+        formData.append('packetPrice', values.packetPrice);
+        formData.append('quantity', values.quantity);
+        formData.append('description', values.description);
+        formData.append('primaryCategory', values.primaryCategory);
+        formData.append('secondaryCategory', values.secondaryCategory);
+        formData.append('isPacket', values.isPacket);
+        formData.append('weight', values.weight);
+        formData.append('image', selectedImage);
+        const response = await axios.post(`${BaseUrl}/product/add`,formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
           withCredentials: true,
         });
         if(response.status === 403){
           navigate('/login')
         }
-        console.log('Product added:', response.data);
+        // console.log('Product added:', response.data);
         handleClose();
         resetForm();
       } catch (error) {
-        console.error('Error adding product:', error);
+        // console.error('Error adding product:', error);
         
       }
     },
@@ -218,6 +231,17 @@ const AddProduct = () => {
                 helperText={formik.touched.weight && formik.errors.weight}
               />
             )}
+            <input
+  type="file"
+  name="image"
+  onChange={(e) => {
+    setSelectedImage(e.target.files[0]);
+    formik.setFieldValue("image", e.target.files[0]);
+  }}
+/>
+
+            
+            
             <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 3 }}>
               Add Product
             </Button>

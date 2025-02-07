@@ -3,6 +3,7 @@ import { useCart } from "../utils/GeneralContext";
 import { UserContext } from "../utils/GeneralContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Paper,
   Table,
@@ -21,79 +22,81 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  TextField,
 } from "@mui/material";
+import PrintableBill from "../components/Shared/BillFormat";
 
 const Cart = () => {
   const Base_URL = import.meta.env.VITE_BACKEND_URL;
   const { user } = useContext(UserContext);
-  const { cartItems ,setCartItems} = useCart();
- const navigate=useNavigate();
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(""); // Store selected payment method
+  const { cartItems, setCartItems } = useCart();
+  const navigate = useNavigate();
 
-  //check user is logged in or not
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [billOpen, setBillOpen] = useState(false);
+  const [custumerInfo, setCustumerInfo] = useState({ name: "", contact: "" });
+
   if (!user) {
     navigate("/login");
-    return <Typography variant="h6" sx={{ textAlign: "center", mt: 5 }}>please login...</Typography>;
+    return (
+      <Typography variant="h6" sx={{ textAlign: "center", mt: 5 }}>
+        Please login...
+      </Typography>
+    );
   }
 
   if (cartItems.length === 0) {
     return (
-      <>
-      <div className="div flex flex-col items-center justify-center">
-      <Typography variant="h4" align="center" mt={5}>
-        Your cart is empty!
-      </Typography>
-      <button  onClick={()=>navigate("/products")} className="bg-emerald-300 px-5 py-1 text-center m-8 rounded text-2xl">click</button>
+      <div className="flex flex-col items-center justify-center">
+        <Typography variant="h4" align="center" mt={5}>
+          Your cart is empty!
+        </Typography>
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-emerald-300 px-5 py-1 text-center m-8 rounded text-2xl"
+        >
+          Click
+        </button>
       </div>
-      </>
     );
   }
 
-  // Calculate total for individual item
   const calculateItemTotal = (item) => {
-    if (item.isPacket) {
-      return (item.price * item.quantity).toFixed(2);
-    } else {
-      return ((item.price / 1000) * item.weightInGrams).toFixed(2);
-    }
+    return item.isPacket
+      ? (item.price * item.quantity).toFixed(2)
+      : ((item.price / 1000) * item.weightInGrams).toFixed(2);
   };
 
-  // Calculate overall total for the cart
   const calculateTotal = () => {
     return cartItems
       .reduce((total, item) => total + parseFloat(calculateItemTotal(item)), 0)
       .toFixed(2);
   };
 
-  // Format weight for display
   const formatWeight = (weightInGrams) => {
-    if (weightInGrams === undefined) return "N/A"; // For packet items
+    if (weightInGrams === undefined) return "N/A";
     const kg = Math.floor(weightInGrams / 1000);
     const g = weightInGrams % 1000;
-    if (kg > 0 && g > 0) return `${kg}kg ${g}g`;
-    if (kg > 0) return `${kg}kg`;
-    return `${g}g`;
+    return kg > 0 && g > 0 ? `${kg}kg ${g}g` : kg > 0 ? `${kg}kg` : `${g}g`;
   };
 
-  // Handlers
   const handleCheckoutOpen = () => setCheckoutOpen(true);
   const handleCheckoutClose = () => setCheckoutOpen(false);
 
-  const handlePaymentSubmit = () => {
+  const handlePaymentSubmit = async () => {
     if (!paymentMethod) {
       alert("Please select a payment method!");
       return;
     }
 
-    // Prepare the order data dynamically
     const orderData = {
       seller: user._id,
       sellername: user.username,
       orderItems: cartItems.map((item) => ({
         name: item.name,
         product: item.id,
-        quantity: item.ispacket?item.quantity:formatWeight(item.weightInGrams),
+        quantity: item.isPacket ? item.quantity : formatWeight(item.weightInGrams),
         price: item.price,
         weightInGrams: item.weightInGrams,
       })),
@@ -102,102 +105,83 @@ const Cart = () => {
       paidAt: new Date(),
       method: paymentMethod,
     };
-    const response=axios.post(`${Base_URL}/order/add`,orderData,
-    {
-      withCredentials: true,
-    } 
-    );
-if(response.data){
-  console.log(response.data);
-}
 
-    // Simulate saving to the database or performing further actions
-    alert(`Order placed successfully with ${paymentMethod} payment!`);
-    
-
-    // Reset state and close the modal
-   
-    setPaymentMethod("");
-    setCheckoutOpen(false);
-    setCartItems([]);
+    try {
+      const response = await axios.post(`${Base_URL}/order/add`, orderData, {
+        withCredentials: true,
+      });
+      if (response.data) {
+        alert(`Order placed successfully with ${paymentMethod} payment!`);
+        setCartItems([]);
+      }
+    } catch (error) {
+      // console.error("Error placing order:", error);
+      alert("Order failed. Please try again.");
+    } finally {
+      setPaymentMethod("");
+      setCheckoutOpen(false);
+    }
   };
 
-  
-
   return (
-    <Paper
-      sx={{
-        width: "100%",
-        height: "calc(100vh - 138px)",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {/* Table Container */}
-      <TableContainer
-        sx={{
-          flex: 1,
-          overflowX: "auto",
-        }}
-      >
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Weight</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Total (₹)</TableCell>
+    <Paper sx={{ width: "100%", minHeight: "100vh", display: "flex", flexDirection: "column",backgroundColor:"#f9faef" }} className="bg-surface">
+      <TableContainer sx={{ flex: 1, overflowX: "auto" }}>
+        <Table >
+          <TableHead >
+            <TableRow className="bg-primary" >
+              <TableCell sx={{color:"#ffffff",fontWeight:"600",fontSize:"1rem"}}>Name</TableCell>
+              <TableCell sx={{color:"#ffffff",fontWeight:"600",fontSize:"1rem"}}>Price</TableCell>
+              {/* <TableCell sx={{color:"#ffffff",fontWeight:"600",fontSize:"1rem"}}>Weight</TableCell> */}
+              <TableCell sx={{color:"#ffffff",fontWeight:"600",fontSize:"1rem"}}>Quantity</TableCell>
+              <TableCell sx={{color:"#ffffff",fontWeight:"600",fontSize:"1rem"}}>Total (₹)</TableCell>
+              <TableCell sx={{color:"#ffffff",fontWeight:"600",fontSize:"1rem"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {cartItems.map((item) => (
-              <TableRow key={item.id} alignItems="center">
+              <TableRow key={item.id} alignItems="center"className=" bg-surface">
                 <TableCell>{item.name}</TableCell>
-                <TableCell>
-                  {item.isPacket
-                    ? `₹${item.price.toFixed(2)} (Packet)`
-                    : `₹${item.price.toFixed(2)} / Kg`}
-                </TableCell>
-                <TableCell>
-                  {item.isPacket ? "Packet" : formatWeight(item.weightInGrams)}
-                </TableCell>
-                <TableCell>{item.quantity}</TableCell>
+                <TableCell>{item.isPacket ? `₹${item.price.toFixed(2)} (Packet)` : `₹${item.price.toFixed(2)} / Kg`}</TableCell>
+                <TableCell>{item.isPacket ? item.quantity : formatWeight(item.weightInGrams)}</TableCell>
+                {/* <TableCell>{item.quantity}</TableCell> */}
                 <TableCell>₹{calculateItemTotal(item)}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    sx={{ backgroundColor: "#f44336", color: "white" }}
+                    onClick={() => setCartItems((prevItems) => prevItems.filter((cartItem) => cartItem.id !== item.id))}
+                  >
+                    <DeleteIcon  />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Sticky Footer */}
-      <Box
-        sx={{
-          borderTop: "1px solid #ddd",
-          backgroundColor: "#f9f9f9",
-          p: 2,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          position: "sticky",
-          bottom: 0,
-          width: "100%",
-        }}
-      >
+      <Box sx={{ borderTop: "1px solid #ddd", backgroundColor: "#dce7c8", p: 2, display: "flex", justifyContent: "space-between", alignItems: "center",
+        position: "fixed", bottom:"0",width:"100%",zIndex:"100"
+       }}>
         <Typography variant="h5">Total: ₹ {calculateTotal()}</Typography>
-        <Button variant="contained" color="primary" onClick={handleCheckoutOpen}>
-          Checkout
-        </Button>
+        <div className="flex flex-row gap-3">
+          <Button variant="contained" sx={
+            {backgroundColor:"#1a1c16", color:"white"}
+          } onClick={() => setBillOpen(true)}>
+            Send Bill
+          </Button>
+          <Button variant="contained" sx={{
+            backgroundColor: "#4caf50",
+          }} onClick={handleCheckoutOpen}>
+            Checkout
+          </Button>
+        </div>
       </Box>
 
-      {/* Checkout Modal */}
       <Dialog open={checkoutOpen} onClose={handleCheckoutClose}>
         <DialogTitle>Select Payment Method</DialogTitle>
         <DialogContent>
-          <RadioGroup
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          >
+          <RadioGroup value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
             <FormControlLabel value="Cash" control={<Radio />} label="Cash" />
             <FormControlLabel value="UPI" control={<Radio />} label="UPI" />
           </RadioGroup>
@@ -208,6 +192,52 @@ if(response.data){
           </Button>
           <Button onClick={handlePaymentSubmit} variant="contained" color="primary">
             Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={billOpen} onClose={() => setBillOpen(false)}>
+        <DialogTitle>Send Bill</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Name"
+            variant="outlined"
+            type="text"
+            required
+            value={custumerInfo.name}
+            onChange={(e) => setCustumerInfo((prev) => ({ ...prev, name: e.target.value }))}
+            margin="dense"
+          />
+          <TextField
+            fullWidth
+            label="Contact Number"
+            variant="outlined"
+            type="text"
+            value={custumerInfo.contact}
+            required
+            onChange={(e) => setCustumerInfo((prev) => ({ ...prev, contact: e.target.value }))}
+            margin="dense"
+          />
+           <div className="flex justify-center"><PrintableBill name={custumerInfo.name}/></div>
+        </DialogContent>
+       
+        <DialogActions>
+          <Button onClick={() => setBillOpen(false)} color="secondary">
+            Close
+          </Button>
+          <Button
+            onClick={() => {
+              if (!custumerInfo.name || !custumerInfo.contact) {
+                alert("Please fill in all fields.");
+              } else {
+                alert("Printing...");
+              }
+            }}
+            variant="contained"
+            color="primary"
+          >
+            Send
           </Button>
         </DialogActions>
       </Dialog>

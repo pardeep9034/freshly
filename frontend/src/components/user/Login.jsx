@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
-import { UserContext } from "../../utils/GeneralContext";   
+import { UserContext } from "../../utils/GeneralContext";
 
 const LoginPage = () => {
   const [phoneno, setPhoneNo] = useState("");
@@ -20,16 +20,14 @@ const LoginPage = () => {
   const [role, setRole] = useState("employee"); // Default role is 'employee'
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const {  setUser,user } = useContext(UserContext);
- 
+  const { setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
-  const API_BASE_URL = "https://freshly-backend-wis8.onrender.com"; // Centralized API URL
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Reset error state and validate inputs
     setError("");
     if (!phoneno || !password) {
       setError("Phone number and password are required.");
@@ -44,33 +42,23 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      // Determine the endpoint based on role
       const endpoint =
         role === "manager" ? "/user/manager/login" : "/user/employee/login";
 
-      // Send login request
       const response = await axios.post(
         `${API_BASE_URL}${endpoint}`,
         { phoneno, password },
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true, // Include cookies
+          withCredentials: true,
         }
       );
 
-      // Handle successful login
       if (response) {
-        // Update user context with the logged-in user
         setUser(response.data.user);
-
-        
-        
-
         navigate(role === "manager" ? "/dashboard/main" : "/products");
-
       }
     } catch (err) {
-      // Capture server or network error
       const errorMessage =
         err.response?.data?.message || "Unable to login. Please try again.";
       setError(errorMessage);
@@ -86,10 +74,18 @@ const LoginPage = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        backgroundColor: "#f4f4f4",
+        backgroundColor: "#dce7c8",
       }}
     >
-      <Paper elevation={3} sx={{ padding: 3, width: 400 }}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 3,
+          width: 400,
+          backgroundColor: "#d4e7c5",
+          color: "#15310b",
+        }}
+      >
         <Typography variant="h5" gutterBottom align="center">
           Login
         </Typography>
@@ -98,31 +94,87 @@ const LoginPage = () => {
           <Grid container spacing={2}>
             {/* Role Selection */}
             <Grid item xs={12}>
-              <TextField
-                select
-                fullWidth
-                label="Role"
-                variant="outlined"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-              >
-                <MenuItem value="employee">Employee</MenuItem>
-                <MenuItem value="manager">Manager</MenuItem>
-              </TextField>
-            </Grid>
+  <TextField
+    select
+    fullWidth
+    label="Role"
+    variant="outlined"
+    color="success"
+    value={role}
+    onChange={(e) => setRole(e.target.value)}
+    required
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": { borderColor: "#4c662b" },
+        "&:hover fieldset": { borderColor: "#3a5223" },
+        "&.Mui-focused fieldset": { borderColor: "#4c662b" },
+      },
+      "& .MuiSelect-select": {
+        backgroundColor: "#eaf4dc",
+      },
+      "& .MuiSelect-icon": {
+        color: "#4c662b",
+      },
+    }}
+    SelectProps={{
+      MenuProps: {
+        PaperProps: {
+          sx: {
+            backgroundColor: "#dce7c8", // Background color of the dropdown
+            "& .MuiMenuItem-root": {
+              "&:hover": {
+                backgroundColor: "#c9dbb1", // Hover effect for dropdown options
+              },
+              "&.Mui-selected": {
+                backgroundColor: "#b7c99e", // Background for selected option
+                "&:hover": {
+                  backgroundColor: "#a9bc8f", // Hover effect for selected option
+                },
+              },
+            },
+          },
+        },
+      },
+    }}
+  >
+    <MenuItem value="employee">Employee</MenuItem>
+    <MenuItem value="manager">Manager</MenuItem>
+  </TextField>
+</Grid>
+
+
 
             {/* Phone Number Field */}
             <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Phone No."
-                variant="outlined"
-                type="tel"
-                value={phoneno}
-                onChange={(e) => setPhoneNo(e.target.value)}
-                required
-              />
+            <TextField
+  fullWidth
+  label="Phone No."
+  variant="outlined"
+  type="text"
+  value={phoneno}
+  onChange={(e) => setPhoneNo(e.target.value)}
+  required
+  sx={{
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "#4c662b",
+      },
+      "&:hover fieldset": {
+        borderColor: "#6a874a",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#4c662b",
+      },
+      backgroundColor: role === "manager" ? "#f0f4ff" : "#eaf4dc", // Manager and Employee colors
+    },
+    "& .MuiInputLabel-root": {
+      color: "#4c662b",
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+      color: "#6a874a",
+    },
+  }}
+/>
             </Grid>
 
             {/* Password Field */}
@@ -136,6 +188,26 @@ const LoginPage = () => {
                 name="password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#4c662b",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#6a874a",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#4c662b",
+                    },
+                    backgroundColor: role === "manager" ? "#f0f4ff" : "#eaf4dc", // Manager and Employee colors
+                  },
+                  "& .MuiInputLabel-root": {
+                    color: "#4c662b",
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#6a874a",
+                  },
+                }}
               />
             </Grid>
 
@@ -154,7 +226,7 @@ const LoginPage = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"
+                sx={{ backgroundColor: "#4c662b", color: "#ffffff" }}
                 disabled={loading}
                 startIcon={loading ? <CircularProgress size={20} /> : null}
               >

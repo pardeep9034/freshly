@@ -22,7 +22,7 @@ const EditPrice = () => {
         });
         setProducts(response.data); // Populate products
       } catch (err) {
-        console.error("Fetch products failed:", err);
+        // console.error("Fetch products failed:", err);
         setError("Failed to load products. Please try again.");
       }
     };
@@ -72,7 +72,7 @@ const EditPrice = () => {
           handleClose(); // Close the modal after success
         }
       } catch (error) {
-        console.error("Error updating price:", error);
+        // console.error("Error updating price:", error);
         setError("Failed to update price. Please try again.");
       }
     }

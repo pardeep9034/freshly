@@ -4,6 +4,7 @@ import Home from './components/Home/Home';
 import Footer from './components/Footer/Footer';
 import Products from './Pages/Product';
 import Cart from './Pages/Cart';
+import Profile from './Pages/Profile';
 import LoginPage from './components/user/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import { CartProvider } from './utils/GeneralContext';
@@ -25,9 +26,10 @@ const AppContent = () => {
       {!hideNavbarFooter && <Navbar />}
       
       {/* Main content area */}
-      <main className="flex-grow">
+      <main className="flex-grow bg-surface">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile/>} />
           <Route path="/products" element={<Products />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/cart" element={<Cart />} />

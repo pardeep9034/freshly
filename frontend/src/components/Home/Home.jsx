@@ -1,6 +1,8 @@
 import React from "react";
-
+import PrintableBill from "../Shared/BillFormat";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
+  const navigate = useNavigate();
   const features = [
     {
       title: "Fresh Inventory",
@@ -106,6 +108,10 @@ const Home = () => {
       style={{
         letterSpacing: "0.1rem",
       }}
+      type="submit"
+      onClick={() => {
+        navigate("/login");
+      }}
     >
       Get Started
     </button>
@@ -203,6 +209,7 @@ const Home = () => {
           </form>
         </div>
       </section>
+
     </div>
   );
 };

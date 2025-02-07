@@ -24,10 +24,10 @@ const Employee = () => {
           });
         
 
-        console.log(response.data);
+        // console.log(response.data);
         setEmployees(response.data);
       } catch (error) {
-        console.error("Error fetching employees:", error);
+        // console.error("Error fetching employees:", error);
       }
     };
 

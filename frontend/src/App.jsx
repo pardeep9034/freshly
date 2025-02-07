@@ -28,7 +28,7 @@ const AppContent = () => {
       {/* Main content area */}
       <main className="flex-grow bg-surface">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/*" element={<Home />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/products" element={<Products />} />
           <Route path="/orders" element={<Orders />} />
